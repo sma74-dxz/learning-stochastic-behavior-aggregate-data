@@ -1,0 +1,24 @@
+{
+  "synthetic": {
+    "drift_hidden_layers": 1,
+    "critic_hidden_layers": 3,
+    "hidden_width": 32,
+    "activation": "tanh",
+    "learning_rate": 0.0001,
+    "samples_per_time": 2000,
+    "training_samples": 1200,
+    "test_samples": 800,
+    "dt": 0.01
+  },
+  "rna_seq": {
+    "state_dimension": 10,
+    "hidden_layers": 3,
+    "hidden_width": 64
+  },
+  "jpm_volume": {
+    "observations_per_day": 78,
+    "dt": 0.02,
+    "max_time_steps": 22,
+    "preprocess": "natural_log_volume"
+  }
+}

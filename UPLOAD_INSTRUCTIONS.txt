@@ -1,0 +1,18 @@
+UPLOAD INSTRUCTIONS
+
+Recommended:
+1. Create a NEW empty GitHub repository.
+2. Unzip this package on your computer.
+3. In the GitHub empty repository page, click "uploading an existing file".
+4. Drag the FOUR folders (src, experiments, configs, docs) plus the THREE root files
+   (README.md, requirements.txt, .gitignore) into the upload area.
+5. Do NOT open the folders and select all nested files individually.
+6. Confirm GitHub preview shows paths such as:
+      src/aggregate_dynamics/models.py
+      experiments/synthetic_2d.py
+      configs/paper_reference.json
+      docs/VERSION_AUDIT.md
+   rather than every file at repository root.
+7. Commit.
+
+There should be only ONE README.md at the repository root.

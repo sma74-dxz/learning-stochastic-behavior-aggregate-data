@@ -1,0 +1,13 @@
+{
+  "samples": 512,
+  "dt": 0.01,
+  "sigma": 1.0,
+  "observation_steps": [
+    3,
+    9
+  ],
+  "iterations": 250,
+  "critic_steps": 3,
+  "hidden_width": 32,
+  "seed": 7
+}
