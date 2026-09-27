@@ -16,83 +16,62 @@ are observed.
 Instead of tracking the same individual through time, the data consist of
 independent samples from the population distribution at several time points:
 
-```text
-X_0 ~ p(x,t_0)
-X_1 ~ p(x,t_1)
-...
-X_J ~ p(x,t_J)
-```
+**X₀ ~ p(x,t₀),  X₁ ~ p(x,t₁),  …,  Xⱼ ~ p(x,tⱼ)**
 
 Individual identities and complete trajectories are not required.
 
-The latent dynamics are modeled by the stochastic differential equation
+The latent dynamics are modeled by the stochastic differential equation:
 
-```text
-dX_t = g_theta(X_t) dt + sigma dW_t
-```
+**dXₜ = gθ(Xₜ) dt + σ dWₜ**
 
-where the unknown drift field `g_theta` is represented by a neural network.
+where the unknown drift field **gθ** is represented by a neural network.
 
 The method combines:
 
-- the **weak form of the Fokker-Planck equation**,
+- the **weak form of the Fokker–Planck equation**,
 - **Wasserstein-1 duality**,
 - WGAN-style 1-Lipschitz test functions,
-- sample-based Euler-Maruyama simulation,
+- sample-based Euler–Maruyama simulation,
 - alternating optimization of the drift and Wasserstein critics.
 
-The key point is that the Fokker-Planck PDE is never discretized on a spatial
-grid.
+The key point is that the Fokker–Planck PDE is never discretized on a spatial grid.
 
 ---
 
-## Weak Fokker-Planck Operator
+## Weak Fokker–Planck Operator
 
-For a smooth test function `f`, define
+For a smooth test function **f**, define:
 
-```text
-L_g f(x)
-    =
-g_theta(x) . grad f(x)
-+
-0.5 * sigma^2 * Laplacian f(x)
-```
+**L_g f(x) = gθ(x) · ∇f(x) + ½ σ² Δf(x)**
 
-The weak Fokker-Planck identity implies that, over a time interval,
+where:
 
-```text
-E[f(X_t)] - E[f(X_0)]
-    =
-Integral E[L_g f(X_s)] ds
-```
+- **∇f(x)** is the gradient of the test function,
+- **Δf(x)** is its Laplacian,
+- **gθ(x)** is the learned drift field,
+- **σ** is the diffusion coefficient.
 
-The code approximates this time integral with a trapezoidal rule evaluated on
-sampled states.
+The weak Fokker–Planck identity implies that over a time interval:
 
-For an observed aggregate snapshot at time `t_j`, the resulting discrepancy is
+**E[f(Xₜ)] − E[f(X₀)] = ∫₀ᵗ E[L_g f(Xₛ)] ds**
 
-```text
-D_j(g,f_j)
-    =
-E_data_tj[f_j]
--
-E_data_t0[f_j]
--
-Integral_0^tj E[L_g f_j] dt
-```
+The code approximates this time integral with a trapezoidal rule evaluated on sampled states.
 
-Each `f_j` is constrained to be approximately 1-Lipschitz using spectral
-normalization.
+For an observed aggregate snapshot at time **tⱼ**, the discrepancy is:
+
+**Dⱼ(g,fⱼ) = E_data,tⱼ[fⱼ] − E_data,t₀[fⱼ] − ∫₀ᵗʲ E[L_g fⱼ] dt**
+
+Each **fⱼ** is constrained to be approximately 1-Lipschitz using spectral normalization.
 
 Training alternates between:
 
-```text
-critic step:
-    maximize D_j(g, f_j)
+**Critic step**
 
-drift step:
-    minimize sum_j D_j(g, f_j)
-```
+maximize **Dⱼ(g,fⱼ)**
+
+**Drift step**
+
+minimize **Σⱼ Dⱼ(g,fⱼ)**
 
 ---
 
@@ -119,11 +98,8 @@ learning_stochastic_behavior_aggregate_data/
 │   ├── synthetic_2d.py
 │   ├── gene_expression_template.py
 │   └── trading_volume_template.py
-├── docs/
-│   └── VERSION_AUDIT.md
-├── data/
-│   └── README.md
-└── figures/
+└── docs/
+    └── VERSION_AUDIT.md
 ```
 
 ---
@@ -135,8 +111,8 @@ nonlinear mixture dynamics, and a Van der Pol-type oscillator.
 
 For the reported synthetic experiments:
 
-- drift network `g`: 1 hidden layer,
-- critic network `f`: 3 hidden layers,
+- drift network **g**: 1 hidden layer,
+- critic network **f**: 3 hidden layers,
 - hidden width: 32,
 - activation: `tanh`,
 - optimizer: Adam,
@@ -163,9 +139,7 @@ historical research run.
 
 The paper uses aggregate single-cell RNA-seq observations at:
 
-```text
-D0, D2, D4, D7
-```
+**D0, D2, D4, D7**
 
 with no cell identity linking one observation time to the next.
 
@@ -173,10 +147,8 @@ Ten gene markers are used to form a 10-dimensional aggregate state.
 
 The paper evaluates two prediction tasks:
 
-```text
-train on D0, D4, D7 -> predict D2
-train on D0, D2, D4 -> predict D7
-```
+- train on D0, D4, D7 → predict D2
+- train on D0, D2, D4 → predict D7
 
 The original data files are not redistributed here.
 
@@ -217,7 +189,7 @@ All four repeatedly define:
 - spectral normalization,
 - drift and critic networks,
 - first/second derivatives,
-- weak FPE operator,
+- weak Fokker–Planck operator,
 - trapezoidal weak-FPE integral,
 - alternating critic / drift updates.
 
